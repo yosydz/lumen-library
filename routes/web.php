@@ -61,9 +61,9 @@ $router->group(['middleware' => 'auth:admin'], function () use ($router) {
     });
 
     $router->group(['prefix' => 'books'], function () use ($router) {
-        $router->post('/', function () {
-            // TODO: Routes this to the right controller
-        });
+        $router->post('/', ['uses' => 'BookController@postBook']);
+        
+        $router->get('/', ['middleware' => 'jwt', 'uses' => 'BookController@index']);
 
         $router->put('/{bookId}', function () {
             // TODO: Routes this to the right controller
@@ -85,6 +85,7 @@ $router->group(['middleware' => 'auth:user'], function () use ($router) {
     $router->group(['prefix' => 'transactions'], function () use ($router) {
         $router->post('/', function () {
             // TODO: Routes this to the right controller
+            return 'transaction';
         });
     });
 });

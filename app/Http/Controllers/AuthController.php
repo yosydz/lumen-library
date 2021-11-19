@@ -21,32 +21,59 @@ class AuthController extends Controller
         //
     }
 
-    // TODO: Create auth logic
+    protected function jwt(User $user)
+    {
+        $payload = [
+            'iss' => "lumen-jwt",
+            'sub' => $user->id,
+            'iat' => time(),
+            'exp' => time() + 60 * 60
+        ];
+        return JWT::encode($payload, env('JWT_SECRET'));
+    }
 
     public function register(Request $request)
     {
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'email' => 'required',
+            'password' => 'required',
+            'role' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors(),
+            ], 400);
+        }
+
         $name = $request->input('name');
         $email = $request->input('email');
         $password = Hash::make($request->input('password'));
+        $role = $request->input('role');
 
-        $register = User::create([
-            'name' => $name,
-            'email' => $email,
-            'password' => $password
-        ]);
-
-        if ($register) {
-            return response()->json([
+        try {
+            $register = User::create([
+                'name' => $name,
+                'email' => $email,
+                'password' => $password,
+                'role' => $role
+            ]);
+            $tokenJwt = $this->jwt($register);
+            $response = [
                 'success' => true,
                 'message' => 'Register Success!',
                 'data' => ([
-                    'token' => 'token'
+                    'token' => $tokenJwt
                 ])
-            ], 201);
-        } else {
+            ];
+            return response()->json($response, 200);
+        } catch (QueryException $error) {
             return response()->json([
                 'success' => false,
-                'message' => 'Register Failed!',
+                'message' => "Register Failed!" . $error->errorInfo,
             ], 400);
         }
     }
@@ -60,11 +87,12 @@ class AuthController extends Controller
 
         if ($user) {
             if (Hash::check($password, $user->password)) {
+                $tokenJwt = $this->jwt($user);
                 return response()->json([
                     'success' => true,
                     'message' => 'Successfully Login!',
                     'data' => [
-                        'token' => 'token',
+                        'token' => $tokenJwt,
                     ]
                 ], 200);
             } else {

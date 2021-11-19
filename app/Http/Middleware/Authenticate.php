@@ -37,10 +37,17 @@ class Authenticate
      */
     public function handle(Request $request, Closure $next, $guard = null)
     {
-        if ($guard==='admin') {
-            return $next($request);
+        $token = $request->header('token');
+        if ($guard=='admin') {
+            return response('Unauthorized.', 401);
         }
-        return 'You Dont have Access';
+
+        return $next($request);
         
+    }
+
+    public function admin()
+    {
+        return 'auth:admin';
     }
 }
