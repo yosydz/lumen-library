@@ -19,10 +19,9 @@ $router->get('/', function () use ($router) {
 
 $router->group(['prefix' => 'auth'], function () use ($router) {
 
-    $router->post('/register', function () {
+    $router->post('/register', ['uses' => 'AuthController@register'],function () {
         // TODO: Routes this to the right controller
     });
-    $router->post('/register', ['uses' => 'AuthController@register']);
 
     $router->post('/login', ['uses' => 'AuthController@login'], function () {
         // TODO: Routes this to the right controller
@@ -49,11 +48,11 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     });
 
     $router->group(['prefix' => 'transactions'], function () use ($router) {
-        $router->get('/', function () {
+        $router->get('/', ['uses' => 'TransactionController@index'], function () {
             // TODO: Routes this to the right controller
         });
 
-        $router->get('/{transactionId}', function () {
+        $router->get('/{transactionId}', ['uses' => 'TransactionController@getTransactionById'], function () {
             // TODO: Routes this to the right controller
         });
     });
@@ -80,17 +79,19 @@ $router->group(['middleware' => 'auth:admin'], function () use ($router) {
     });
 
     $router->group(['prefix' => 'transactions'], function () use ($router) {
-        $router->put('/{transactionId}', function () {
+        $router->put('/{transactionId}', ['uses' => 'TransactionController@index'], function () {
             // TODO: Routes this to the right controller
         });
+        
     });
 });
 
 $router->group(['middleware' => 'auth:user'], function () use ($router) {
     $router->group(['prefix' => 'transactions'], function () use ($router) {
-        $router->post('/', function () {
+        
             // TODO: Routes this to the right controller
-            return 'transaction';
-        });
+            $router->post('/', ['uses' => 'TransactionController@postTransaction']);
+
+        
     });
 });
