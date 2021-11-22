@@ -13,6 +13,7 @@ class Book extends Model
      * @var array
      */
     protected $fillable = [
+
         // TODO: Insert your fillable fields
         'title', 'description', 'author', 'year', 'synopsis', 'stock'
     ];
@@ -23,6 +24,7 @@ class Book extends Model
      * @var array
      */
     protected $hidden = [
+
         // TODO: Insert your hidden fields
         'created_at', 'updated_at'
     ];

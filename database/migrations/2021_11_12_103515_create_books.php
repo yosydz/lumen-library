@@ -20,9 +20,7 @@ class CreateBooks extends Migration
             $table->string('author');
             $table->string('year');
             $table->string('synopsis');
-            $table->string('stock');
-            // This is where you type your code
-
+            $table->int('stock');
             $table->timestamps();
         });
     }
