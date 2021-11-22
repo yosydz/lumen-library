@@ -21,20 +21,20 @@ $router->group(['prefix' => 'auth'], function () use ($router) {
     $router->post('/register', function () {
         // TODO: Routes this to the right controller
     });
+    $router->post('/register', ['uses' => 'AuthController@register']);
 
-    $router->post('/login', function () {
+    $router->post('/login', ['uses' => 'AuthController@login'], function () {
         // TODO: Routes this to the right controller
     });
 });
 
 $router->group(['prefix' => 'books'], function () use ($router) {
-    $router->get('/', function () {
-        // TODO: Routes this to the right controller
-    });
-
-    $router->get('/{bookId}', function () {
-        // TODO: Routes this to the right controller
-    });
+    $router->get('/', ['middleware' => 'jwt','uses' => 'BookController@index']);
+    // $router->post('/', ['uses' => 'BookController@postBook']);
+    
+    $router->get('/{bookId}', ['uses' => 'BookController@getBookById']);
+    // $router->put('/{bookId}', ['uses' => 'BookController@updateBook']);
+    // $router->delete('/{bookId}', ['uses' => 'BookController@deleteBook']);
 });
 
 $router->group(['middleware' => 'auth'], function () use ($router) {
