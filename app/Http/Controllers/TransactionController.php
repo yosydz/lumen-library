@@ -73,12 +73,12 @@ class TransactionController extends Controller
 
     public function postTransaction (Request $request){
         $book_id = $request->input('book_id');
-        $user_id = $request->input('user_id');
+        $user_id = $request->auth->id;
         $deadline = $request->input('deadline');
         
+        // var_dump($request->auth->id);die;
         $validator = Validator::make($request->all(), [
             'book_id' => 'required',
-            'user_id' => 'required',
             'deadline' => 'required'
         ]);
 
@@ -109,14 +109,13 @@ class TransactionController extends Controller
                 'message' => 'Request Failed!',
             ], 400);
         }
+        
     }
 
     public function updateTransaction(Request $request, $transactionId){
         $updateTransaction = Transaction::findOrFail($transactionId);
 
         $validator = Validator::make($request->all(), [
-            'book_id' => 'required',
-            'user_id' => 'required',
             'deadline' => 'required'
         ]);
 
@@ -128,6 +127,11 @@ class TransactionController extends Controller
         }
 
         try {
+
+            // $updateTransaction = Transaction::create([
+            //     'deadline' => NULL
+            // ]);
+
             $updateTransaction->update($request->all());
             $response = [
                 'success' => true,

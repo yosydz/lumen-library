@@ -79,7 +79,7 @@ $router->group(['middleware' => 'auth:admin'], function () use ($router) {
     });
 
     $router->group(['prefix' => 'transactions'], function () use ($router) {
-        $router->put('/{transactionId}', ['uses' => 'TransactionController@index'], function () {
+        $router->put('/{transactionId}', ['uses' => 'TransactionController@updateTransaction'], function () {
             // TODO: Routes this to the right controller
         });
         
