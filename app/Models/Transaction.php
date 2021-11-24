@@ -13,7 +13,8 @@ class Transaction extends Model
      * @var array
      */
     protected $fillable = [
-        'book_id', 'user_id', 'deadline',
+        // TODO: Insert your fillable fields
+        'book_id', 'user_id', 'deadline'
     ];
 
     /**
