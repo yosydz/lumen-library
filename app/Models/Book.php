@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Book extends Model
 {
@@ -12,6 +13,8 @@ class Book extends Model
      *
      * @var array
      */
+    use SoftDeletes;
+
     protected $fillable = [
 
         // TODO: Insert your fillable fields
@@ -26,6 +29,6 @@ class Book extends Model
     protected $hidden = [
 
         // TODO: Insert your hidden fields
-        'created_at', 'updated_at'
+        'created_at', 'updated_at', 'deleted_at'
     ];
 }

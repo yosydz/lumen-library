@@ -95,7 +95,7 @@ class BookController extends Controller
                 'message' => $validator->errors(),
             ], 400);
         }
-        
+
         $postBook = Book::create([
             'title' => $title,
             'description' => $description,
@@ -124,21 +124,21 @@ class BookController extends Controller
     public function updateBook(Request $request, $bookId){
         $updateBook = Book::findOrFail($bookId);
 
-        $validator = Validator::make($request->all(), [
-            'title' => 'required',
-            'description' => 'required',
-            'author' => 'required',
-            'year' => 'required',
-            'synopsis' => 'required',
-            'stock' => 'required',
-        ]);
+        // $validator = Validator::make($request->all(), [
+        //     'title' => 'required',
+        //     'description' => 'required',
+        //     'author' => 'required',
+        //     'year' => 'required',
+        //     'synopsis' => 'required',
+        //     'stock' => 'required',
+        // ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => $validator->errors(),
-            ], 400);
-        }
+        // if ($validator->fails()) {
+        //     return response()->json([
+        //         'success' => false,
+        //         'message' => $validator->errors(),
+        //     ], 400);
+        // }
 
         try {
             $updateBook->update($request->all());

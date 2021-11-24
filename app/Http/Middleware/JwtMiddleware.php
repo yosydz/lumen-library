@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Models\User;
 use Closure;
 use Firebase\JWT\JWT;
+use Firebase\JWT\SignatureInvalidException;
 
 class JwtMiddleware
 {
@@ -17,7 +18,7 @@ class JwtMiddleware
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        $token = $request->header('token');
+        $token = $request->header('authorization');
 
         if (!$token) {
             return response()->json([
@@ -42,6 +43,10 @@ class JwtMiddleware
             ], 400);
         }
         $user = User::find($credential->sub);
+        if($guard == null){
+            $request->auth = $user;
+            return $next($request);
+        }
         if($user->role != $guard){
             return response()->json([
                 'success' => false,

@@ -23,6 +23,8 @@ class Transaction extends Model
      * @var array
      */
     protected $hidden = [
+        // TODO: Insert your hidden fields
+
         'created_at', 'updated_at'
     ];
 }
