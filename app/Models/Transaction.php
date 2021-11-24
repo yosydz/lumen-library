@@ -14,6 +14,7 @@ class Transaction extends Model
      */
     protected $fillable = [
         // TODO: Insert your fillable fields
+        'book_id', 'user_id', 'deadline'
     ];
 
     /**
@@ -23,5 +24,6 @@ class Transaction extends Model
      */
     protected $hidden = [
         // TODO: Insert your hidden fields
+        'created_at', 'updated_at'
     ];
 }

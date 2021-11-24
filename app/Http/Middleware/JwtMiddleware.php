@@ -7,6 +7,7 @@ use Closure;
 use Exception;
 use Firebase\JWT\ExpiredException;
 use Firebase\JWT\JWT;
+use Firebase\JWT\SignatureInvalidException;
 
 class JwtMiddleware
 {
@@ -19,7 +20,7 @@ class JwtMiddleware
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        $token = $request->header('token');
+        $token = $request->header('authorization');
 
         if(!$token){
             return response()->json([
@@ -42,13 +43,16 @@ class JwtMiddleware
             ], 400);
         }
         $user = User::find($credential->sub);
-        // var_dump($user->role);die;
-        // $guard = $user->role;
-        // if($user->role === 'admin'){
-        //     //todo
-        // }elseif ($user->role === 'user'){
-        //     //todo
-        // }
+        if($guard == null){
+            $request->auth = $user;
+            return $next($request);
+        }
+        if($user->role != $guard){
+            return response()->json([
+                'success' => false,
+                'error' => 'Unauthorized'
+            ], 400);
+        }
         $request->auth = $user;
         return $next($request);
     }
