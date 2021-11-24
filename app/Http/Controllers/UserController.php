@@ -17,8 +17,6 @@ class UserController extends Controller
     {
         //
     }
-
-    // TODO: Create user logic
     public function index()
     {
         $user = User::all();

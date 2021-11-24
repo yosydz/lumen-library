@@ -7,6 +7,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
+use App\Models\Transaction;
+use Illuminate\Database\QueryException;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+
 class TransactionController extends Controller
 {
     /**
@@ -88,7 +94,7 @@ class TransactionController extends Controller
                 'message' => $validator->errors(),
             ], 400);
         }
-        
+      
         $postTransaction = Transaction::create([
             'book_id' => $book_id,
             'user_id' => $user_id,
@@ -109,6 +115,7 @@ class TransactionController extends Controller
                 'message' => 'Request Failed!',
             ], 400);
         }
+
         
     }
 
@@ -147,9 +154,5 @@ class TransactionController extends Controller
                 'message' => "Gagal" . $error->errorInfo,
             ], 400);
         }
-        
     }
-
-
-
 }
