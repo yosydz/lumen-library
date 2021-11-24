@@ -7,12 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-use App\Models\Transaction;
-use Illuminate\Database\QueryException;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-
 class TransactionController extends Controller
 {
     /**
@@ -26,7 +20,6 @@ class TransactionController extends Controller
     }
 
     // TODO: Create transaction logic
-
     public function index(){
         $transactions = Transaction::all();
         if ($transactions){
@@ -80,12 +73,11 @@ class TransactionController extends Controller
     public function postTransaction (Request $request){
         $book_id = $request->input('book_id');
         $user_id = $request->auth->id;
-        $deadline = $request->input('deadline');
+        $deadline = \Carbon\Carbon::now()->toDateString();
+
         
-        // var_dump($request->auth->id);die;
         $validator = Validator::make($request->all(), [
             'book_id' => 'required',
-            'deadline' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -94,7 +86,6 @@ class TransactionController extends Controller
                 'message' => $validator->errors(),
             ], 400);
         }
-      
         $postTransaction = Transaction::create([
             'book_id' => $book_id,
             'user_id' => $user_id,
@@ -115,8 +106,6 @@ class TransactionController extends Controller
                 'message' => 'Request Failed!',
             ], 400);
         }
-
-        
     }
 
     public function updateTransaction(Request $request, $transactionId){
