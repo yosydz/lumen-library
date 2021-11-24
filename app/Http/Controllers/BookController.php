@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class BookController extends Controller
@@ -18,25 +20,26 @@ class BookController extends Controller
         //
     }
 
-    public function index()
-    {
+    // TODO: Create book logic
+    public function index(){
         $books = Book::all();
-        if ($books) {
-            if (count($books) != 0) {
+        // var_dump(count($books));die;
+        if ($books){
+            if(count($books) != 0){
                 return response()->json([
-                    'success' => true,
-                    'message' => 'List all Books',
-                    'data' => ([
-                        'books' => $books
-                    ])
+                'success' => true,
+                'message' => 'List all Books',
+                'data' => ([
+                    'books' => $books
+                ])
                 ], 201);
-            } else {
+            }else{
                 return response()->json([
-                    'success' => false,
-                    'message' => 'No books',
-                ], 400);
+                'success' => false,
+                'message' => 'No books',
+            ], 400);
             }
-        } else {
+        }else{
             return response()->json([
                 'success' => false,
                 'message' => 'Server Failure',
@@ -44,25 +47,24 @@ class BookController extends Controller
         }
     }
 
-    public function getBookById($bookId)
-    {
+    public function getBookById($bookId){
         $book = Book::find($bookId);
-        if ($book) {
-            if (!empty($book)) {
+        if ($book){
+            if(!empty($book)){
                 return response()->json([
-                    'success' => true,
-                    'message' => 'Get Book by Id',
-                    'data' => ([
-                        'books' => $book
-                    ])
+                'success' => true,
+                'message' => 'Get Book by Id',
+                'data' => ([
+                    'books' => $book
+                ])
                 ], 201);
-            } elseif (empty($book)) {
+            }elseif(empty($book)){
                 return response()->json([
-                    'success' => false,
-                    'message' => 'there is no book with id = ' . $bookId,
-                ], 400);
+                'success' => false,
+                'message' => 'there is no book with id = '.$bookId,
+            ], 400);
             }
-        } else {
+        }else{
             return response()->json([
                 'success' => false,
                 'message' => 'Server Failure',
@@ -70,15 +72,14 @@ class BookController extends Controller
         }
     }
 
-    public function postBook(Request $request)
-    {
+    public function postBook(Request $request){
         $title = $request->input('title');
         $description = $request->input('description');
         $author = $request->input('author');
         $year = $request->input('year');
         $synopsis = $request->input('synopsis');
         $stock = $request->input('stock');
-
+        
         $validator = Validator::make($request->all(), [
             'title' => 'required',
             'description' => 'required',
@@ -94,7 +95,7 @@ class BookController extends Controller
                 'message' => $validator->errors(),
             ], 400);
         }
-
+        
         $postBook = Book::create([
             'title' => $title,
             'description' => $description,
@@ -120,8 +121,7 @@ class BookController extends Controller
         }
     }
 
-    public function updateBook(Request $request, $bookId)
-    {
+    public function updateBook(Request $request, $bookId){
         $updateBook = Book::findOrFail($bookId);
 
         $validator = Validator::make($request->all(), [
@@ -156,10 +156,10 @@ class BookController extends Controller
                 'message' => "Gagal" . $error->errorInfo,
             ], 400);
         }
+        
     }
 
-    public function deleteBook($bookId)
-    {
+    public function deleteBook($bookId){
         $deleteBook = Book::find($bookId);
 
         try {
