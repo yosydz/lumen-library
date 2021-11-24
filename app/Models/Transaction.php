@@ -14,6 +14,7 @@ class Transaction extends Model
      */
     protected $fillable = [
         // TODO: Insert your fillable fields
+        'book_id', 'user_id', 'deadline'
     ];
 
     /**

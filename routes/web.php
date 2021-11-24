@@ -18,46 +18,41 @@ $router->get('/', function () use ($router) {
 });
 
 $router->group(['prefix' => 'auth'], function () use ($router) {
-    $router->post('/register', function () {
+
+    $router->post('/register', ['uses' => 'AuthController@register'],function () {
         // TODO: Routes this to the right controller
     });
 
-    $router->post('/login', function () {
+    $router->post('/login', ['uses' => 'AuthController@login'], function () {
         // TODO: Routes this to the right controller
     });
 });
 
 $router->group(['prefix' => 'books'], function () use ($router) {
-    $router->get('/', function () {
-        // TODO: Routes this to the right controller
-    });
-
-    $router->get('/{bookId}', function () {
-        // TODO: Routes this to the right controller
-    });
+    $router->get('/', ['middleware' => 'jwt','uses' => 'BookController@index']);
+    // $router->post('/', ['uses' => 'BookController@postBook']);
+    
+    $router->get('/{bookId}', ['uses' => 'BookController@getBookById']);
+    // $router->put('/{bookId}', ['uses' => 'BookController@updateBook']);
+    // $router->delete('/{bookId}', ['uses' => 'BookController@deleteBook']);
 });
 
 $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->group(['prefix' => 'users'], function () use ($router) {
-        $router->get('/{userId}', function () {
-            // TODO: Routes this to the right controller
-        });
+        //TODO: Belum menggunakan middleware authorization dan beda user dengan admin
+        $router->get('/{userId}', ['uses' => 'UserController@show']);
 
-        $router->put('/{userId}', function () {
-            // TODO: Routes this to the right controller
-        });
+        $router->put('/{userId}', ['uses' => 'UserController@update']);
 
-        $router->delete('/{userId}', function () {
-            // TODO: Routes this to the right controller
-        });
+        $router->delete('/{userId}', ['uses' => 'UserController@destroy']);
     });
 
     $router->group(['prefix' => 'transactions'], function () use ($router) {
-        $router->get('/', function () {
+        $router->get('/', ['uses' => 'TransactionController@index'], function () {
             // TODO: Routes this to the right controller
         });
 
-        $router->get('/{transactionId}', function () {
+        $router->get('/{transactionId}', ['uses' => 'TransactionController@getTransactionById'], function () {
             // TODO: Routes this to the right controller
         });
     });
@@ -65,15 +60,14 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
 
 $router->group(['middleware' => 'auth:admin'], function () use ($router) {
     $router->group(['prefix' => 'users'], function () use ($router) {
-        $router->get('/', function () {
-            // TODO: Routes this to the right controller
-        });
+        //TODO: auth middleware belum
+        $router->get('/', ['uses' => 'UserController@index']);
     });
 
     $router->group(['prefix' => 'books'], function () use ($router) {
-        $router->post('/', function () {
-            // TODO: Routes this to the right controller
-        });
+        $router->post('/', ['uses' => 'BookController@postBook']);
+        
+        $router->get('/', ['middleware' => 'jwt', 'uses' => 'BookController@index']);
 
         $router->put('/{bookId}', function () {
             // TODO: Routes this to the right controller
@@ -85,16 +79,19 @@ $router->group(['middleware' => 'auth:admin'], function () use ($router) {
     });
 
     $router->group(['prefix' => 'transactions'], function () use ($router) {
-        $router->put('/{transactionId}', function () {
+        $router->put('/{transactionId}', ['uses' => 'TransactionController@updateTransaction'], function () {
             // TODO: Routes this to the right controller
         });
+        
     });
 });
 
 $router->group(['middleware' => 'auth:user'], function () use ($router) {
     $router->group(['prefix' => 'transactions'], function () use ($router) {
-        $router->post('/', function () {
+        
             // TODO: Routes this to the right controller
-        });
+            $router->post('/', ['uses' => 'TransactionController@postTransaction']);
+
+        
     });
 });

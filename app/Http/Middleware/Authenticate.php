@@ -4,6 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Auth\Factory as Auth;
+use \Illuminate\Http\Request;
+
 
 class Authenticate
 {
@@ -33,12 +35,19 @@ class Authenticate
      * @param  string|null  $guard
      * @return mixed
      */
-    public function handle($request, Closure $next, $guard = null)
+    public function handle(Request $request, Closure $next, $guard = null)
     {
-        if ($this->auth->guard($guard)->guest()) {
+        $token = $request->header('token');
+        if ($guard=='admin') {
             return response('Unauthorized.', 401);
         }
 
         return $next($request);
+        
+    }
+
+    public function admin()
+    {
+        return 'auth:admin';
     }
 }
