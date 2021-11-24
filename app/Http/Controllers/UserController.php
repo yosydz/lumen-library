@@ -1,15 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Hash;
 
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -22,49 +18,6 @@ class UserController extends Controller
     {
         //
     }
-    public function index()
-    {
-        $user = User::all();
-        if ($user) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Request Success',
-                'data' => ([
-                    'users' => $user
-                ])
-            ], 201);
-        } else {
-            return response()->json([
-                'success' => false,
-                'message' => 'Request Failed',
-            ], 400);
-        }
-    }
-
-    public function show($userId)
-    {
-        $user = User::findOrFail($userId);
-        if ($user) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Request Success',
-                'data' => ([
-                    'user' => $user
-                ])
-            ], 201);
-        } else {
-            return response()->json([
-                'success' => false,
-                'message' => 'Request Failed',
-            ], 400);
-        }
-    }
-
-    public function update(Request $request, $userId)
-    {
-        $user = User::findOrFail($userId);
-
-    // TODO: Create user logic
     public function index()
     {
         $user = User::all();
