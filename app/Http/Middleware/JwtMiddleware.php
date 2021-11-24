@@ -4,8 +4,6 @@ namespace App\Http\Middleware;
 
 use App\Models\User;
 use Closure;
-use Exception;
-use Firebase\JWT\ExpiredException;
 use Firebase\JWT\JWT;
 use Firebase\JWT\SignatureInvalidException;
 
@@ -22,23 +20,25 @@ class JwtMiddleware
     {
         $token = $request->header('authorization');
 
-        if(!$token){
+        if (!$token) {
             return response()->json([
-                'error' => 'Token not provided'
+                'success' => false,
+                'error' => 'Token required'
             ], 401);
         }
 
-        try{
-            $credential = JWT::decode($token, env('JWT_SECRET'),['HS256']);
-            // var_dump($credential);die;
-        }
-        catch(ExpiredException $e){
+        //TODO: handler jika token tidak sama , signature verification
+
+        try {
+            $credential = JWT::decode($token, env('JWT_SECRET'), ['HS256']);
+        } catch (ExpiredException $e) {
             return response()->json([
+                'success' => false,
                 'error' => 'Provided token is expired'
             ], 400);
-        }
-        catch(Exception $e){
+        } catch (Exception $e) {
             return response()->json([
+                'success' => false,
                 'error' => 'Error while decoding token'
             ], 400);
         }

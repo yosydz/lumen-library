@@ -86,7 +86,6 @@ class TransactionController extends Controller
                 'message' => $validator->errors(),
             ], 400);
         }
-
         $postTransaction = Transaction::create([
             'book_id' => $book_id,
             'user_id' => $user_id,
@@ -112,21 +111,24 @@ class TransactionController extends Controller
     public function updateTransaction(Request $request, $transactionId){
         $updateTransaction = Transaction::findOrFail($transactionId);
 
-        // $validator = Validator::make($request->all(), [
-        //     'deadline' => 'required'
-        // ]);
+        $validator = Validator::make($request->all(), [
+            'deadline' => 'required'
+        ]);
 
-        // if ($validator->fails()) {
-        //     return response()->json([
-        //         'success' => false,
-        //         'message' => $validator->errors(),
-        //     ], 400);
-        // }
-        $updateTransaction->deadline = $request->input("deadline");
-        
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors(),
+            ], 400);
+        }
+
         try {
-            // $updateTransaction->update();
-            $updateTransaction->save();
+
+            // $updateTransaction = Transaction::create([
+            //     'deadline' => NULL
+            // ]);
+
+            $updateTransaction->update($request->all());
             $response = [
                 'success' => true,
                 'message' => 'Transaction Data Updated',
@@ -141,6 +143,5 @@ class TransactionController extends Controller
                 'message' => "Gagal" . $error->errorInfo,
             ], 400);
         }
-
     }
 }
